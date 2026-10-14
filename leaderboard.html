@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Leaderboard - CodeNest</title>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.lb-hero-stats{display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin-top:1.5rem}
+.lb-stat{background:rgba(255,255,255,.12);border-radius:12px;padding:1rem 1.75rem;text-align:center;color:white}
+.lb-stat .n{font-size:1.6rem;font-weight:800}.lb-stat .l{font-size:.8rem;opacity:.7;text-transform:uppercase;letter-spacing:.05em}
+.lb-tabs{display:flex;gap:.5rem;padding:1.5rem 5% 0;border-bottom:2px solid var(--border);background:var(--surface)}
+.lb-tab{padding:.65rem 1.5rem;border:none;background:transparent;font-size:.95rem;font-weight:600;color:var(--text-muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .2s}
+.lb-tab.active,.lb-tab:hover{color:var(--amber);border-bottom-color:var(--amber)}
+.lb-section{display:none;padding:2.5rem 5%}.lb-section.active{display:block}
+.rank-1-row{background:linear-gradient(90deg,rgba(245,158,11,.06),transparent);border-left:3px solid #f59e0b}
+.rank-2-row{background:linear-gradient(90deg,rgba(148,163,184,.05),transparent);border-left:3px solid #94a3b8}
+.rank-3-row{background:linear-gradient(90deg,rgba(205,127,50,.05),transparent);border-left:3px solid #cd7f32}
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem}
+.badge-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;text-align:center;transition:all .2s}
+.badge-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.badge-icon{font-size:2.5rem;margin-bottom:.75rem}
+.badge-card h4{font-size:.9rem;margin-bottom:.25rem}
+.badge-card p{font-size:.78rem;color:var(--text-muted)}
+</style>
+</head>
+<body><nav class="navbar">
+  <div class="nav-brand"><span class="brand-icon"><i class="fas fa-code"></i></span><span class="brand-name">CodeNest</span></div>
+  <ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="challenges.html">Challenges</a></li>
+<li><a href="competitions.html">Competitions</a></li>
+<li><a href="practice.html">Practice</a></li>
+<li><a href="leaderboard.html"  class="active">Leaderboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="openModal('loginModal')">Log In</button>
+    <button class="btn btn-primary" onclick="openModal('signupModal')">Sign Up</button>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Leaderboard</div>
+    <h1>Global <span class="gradient-text">Leaderboard</span></h1>
+    <p>Compete with millions of coders worldwide. Rankings reset every season.</p>
+    <div class="lb-hero-stats">
+      <div class="lb-stat"><div class="n">2M+</div><div class="l">Ranked Coders</div></div>
+      <div class="lb-stat"><div class="n">150+</div><div class="l">Countries</div></div>
+      <div class="lb-stat"><div class="n">500+</div><div class="l">Contests Held</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="lb-tabs">
+  <button class="lb-tab active" onclick="switchLbTab('global',this)">🌍 Global</button>
+  <button class="lb-tab" onclick="switchLbTab('weekly',this)">🔥 This Week</button>
+  <button class="lb-tab" onclick="switchLbTab('country',this)">🏳️ By Country</button>
+  <button class="lb-tab" onclick="switchLbTab('badges',this)">🏅 Badges</button>
+</div>
+
+<div class="lb-section active" id="lb-global">
+  <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:1.5rem">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search coders..."/>
+    </div>
+    <select style="background:var(--surface);border:1.5px solid var(--border);border-radius:8px;padding:.45rem 1rem;font-size:.85rem;color:var(--text)">
+      <option>All Ratings</option><option>Grandmaster (2500+)</option><option>Master (2200-2499)</option>
+      <option>Expert (1800-2199)</option><option>Intermediate (1200-1799)</option>
+    </select>
+  </div>
+  <div class="leaderboard-table">
+    <div class="lb-header">
+      <span>Rank</span><span>Coder</span><span>Rating</span><span>Country</span><span>Solved</span>
+    </div>
+    <div class="lb-row rank-1-row"><span class="lb-rank">🥇 1</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AK</div><div><strong>Aryan Kumar</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">2,847</span><span class="lb-country">🇮🇳 India</span><span>3,241</span></div>
+    <div class="lb-row rank-2-row"><span class="lb-rank">🥈 2</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">SM</div><div><strong>Sophia Martinez</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">2,801</span><span class="lb-country">🇺🇸 USA</span><span>3,105</span></div>
+    <div class="lb-row rank-3-row"><span class="lb-rank">🥉 3</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#10b981,#34d399)">LP</div><div><strong>Liang Peng</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">2,778</span><span class="lb-country">🇨🇳 China</span><span>2,988</span></div>
+    <div class="lb-row"><span class="lb-rank">4</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#f97316,#fbbf24)">RJ</div><div><strong>Rahul Joshi</strong><br/><span class="coder-title">Master</span></div></div><span class="lb-score">2,711</span><span class="lb-country">🇮🇳 India</span><span>2,834</span></div>
+    <div class="lb-row"><span class="lb-rank">5</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#e879f9,#818cf8)">NW</div><div><strong>Nina Walsh</strong><br/><span class="coder-title">Master</span></div></div><span class="lb-score">2,698</span><span class="lb-country">🇬🇧 UK</span><span>2,710</span></div>
+    <div class="lb-row"><span class="lb-rank">6</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#0ea5e9,#6366f1)">TK</div><div><strong>Takashi Kimura</strong><br/><span class="coder-title">Master</span></div></div><span class="lb-score">2,654</span><span class="lb-country">🇯🇵 Japan</span><span>2,601</span></div>
+    <div class="lb-row"><span class="lb-rank">7</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#34d399,#0ea5e9)">AO</div><div><strong>Amara Osei</strong><br/><span class="coder-title">Master</span></div></div><span class="lb-score">2,632</span><span class="lb-country">🇬🇭 Ghana</span><span>2,544</span></div>
+    <div class="lb-row"><span class="lb-rank">8</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#f43f5e,#fb923c)">EV</div><div><strong>Elena Volkov</strong><br/><span class="coder-title">Expert</span></div></div><span class="lb-score">2,589</span><span class="lb-country">🇷🇺 Russia</span><span>2,421</span></div>
+    <div class="lb-row"><span class="lb-rank">9</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#fbbf24,#f59e0b)">CP</div><div><strong>Carlos Perez</strong><br/><span class="coder-title">Expert</span></div></div><span class="lb-score">2,571</span><span class="lb-country">🇧🇷 Brazil</span><span>2,380</span></div>
+    <div class="lb-row"><span class="lb-rank">10</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#818cf8,#c084fc)">SL</div><div><strong>Sara Lee</strong><br/><span class="coder-title">Expert</span></div></div><span class="lb-score">2,548</span><span class="lb-country">🇰🇷 Korea</span><span>2,310</span></div>
+  </div>
+  <div style="text-align:center;margin-top:2rem">
+    <button class="btn btn-outline" onclick="showToast('Loading more entries...','success')">Load More <i class="fas fa-chevron-down"></i></button>
+  </div>
+</div>
+
+<div class="lb-section" id="lb-weekly">
+  <h3 style="margin-bottom:1.5rem">Top Performers <span class="gradient-text">This Week</span></h3>
+  <div class="leaderboard-table">
+    <div class="lb-header"><span>Rank</span><span>Coder</span><span>Points</span><span>Country</span><span>Change</span></div>
+    <div class="lb-row rank-1-row"><span class="lb-rank">🥇 1</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AK</div><div><strong>Aryan Kumar</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">9,842</span><span class="lb-country">🇮🇳 India</span><span style="color:#10b981">▲ 12</span></div>
+    <div class="lb-row rank-2-row"><span class="lb-rank">🥈 2</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#8b5cf6,#3b82f6)">SM</div><div><strong>Sophia Martinez</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">9,611</span><span class="lb-country">🇺🇸 USA</span><span style="color:#10b981">▲ 3</span></div>
+    <div class="lb-row rank-3-row"><span class="lb-rank">🥉 3</span><div class="lb-user"><div class="coder-avatar" style="background:linear-gradient(135deg,#10b981,#34d399)">LP</div><div><strong>Liang Peng</strong><br/><span class="coder-title">Grandmaster</span></div></div><span class="lb-score">9,430</span><span class="lb-country">🇨🇳 China</span><span style="color:#f43f5e">▼ 1</span></div>
+  </div>
+</div>
+
+<div class="lb-section" id="lb-country">
+  <h3 style="margin-bottom:1.5rem">Rankings <span class="gradient-text">By Country</span></h3>
+  <div class="leaderboard-table">
+    <div class="lb-header"><span>Rank</span><span>Country</span><span>Top Coder</span><span>Avg Rating</span><span>Total Solvers</span></div>
+    <div class="lb-row rank-1-row"><span class="lb-rank">🥇 1</span><div class="lb-user">🇺🇸 <strong>United States</strong></div><span>Sophia M.</span><span class="lb-score">2,401</span><span>412,000</span></div>
+    <div class="lb-row rank-2-row"><span class="lb-rank">🥈 2</span><div class="lb-user">🇨🇳 <strong>China</strong></div><span>Liang P.</span><span class="lb-score">2,388</span><span>380,000</span></div>
+    <div class="lb-row rank-3-row"><span class="lb-rank">🥉 3</span><div class="lb-user">🇮🇳 <strong>India</strong></div><span>Aryan K.</span><span class="lb-score">2,340</span><span>356,000</span></div>
+    <div class="lb-row"><span class="lb-rank">4</span><div class="lb-user">🇷🇺 <strong>Russia</strong></div><span>Elena V.</span><span class="lb-score">2,280</span><span>210,000</span></div>
+    <div class="lb-row"><span class="lb-rank">5</span><div class="lb-user">🇯🇵 <strong>Japan</strong></div><span>Takashi K.</span><span class="lb-score">2,241</span><span>188,000</span></div>
+  </div>
+</div>
+
+<div class="lb-section" id="lb-badges">
+  <h3 style="margin-bottom:1.5rem">Achievement <span class="gradient-text">Badges</span></h3>
+  <p style="color:var(--text-muted);margin-bottom:2rem">Earn badges by solving challenges, competing, and maintaining streaks.</p>
+  <div class="badge-grid">
+    <div class="badge-card"><div class="badge-icon">🔥</div><h4>Streak Master</h4><p>30-day coding streak</p></div>
+    <div class="badge-card"><div class="badge-icon">🏆</div><h4>Contest Winner</h4><p>Win any rated contest</p></div>
+    <div class="badge-card"><div class="badge-icon">💡</div><h4>Problem Setter</h4><p>Submit 500 accepted solutions</p></div>
+    <div class="badge-card"><div class="badge-icon">⚡</div><h4>Speed Coder</h4><p>Solve in under 60 seconds</p></div>
+    <div class="badge-card"><div class="badge-icon">🌍</div><h4>Global Citizen</h4><p>Compete with 50+ countries</p></div>
+    <div class="badge-card"><div class="badge-icon">🎯</div><h4>Sharpshooter</h4><p>First submission correct 10x</p></div>
+    <div class="badge-card"><div class="badge-icon">🧠</div><h4>DP Master</h4><p>Solve 100 DP problems</p></div>
+    <div class="badge-card"><div class="badge-icon">🌲</div><h4>Tree Hugger</h4><p>Solve 50 tree problems</p></div>
+  </div>
+</div>
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+    <h2>Welcome Back <i class="fas fa-code"></i></h2>
+    <p class="modal-sub">Log in to continue coding</p>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Password" required/></div>
+      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+    </form>
+    <p class="modal-footer-text">New here? <a onclick="switchModal('loginModal','signupModal')">Sign Up</a></p>
+  </div>
+</div>
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signupModal')"><i class="fas fa-times"></i></button>
+    <h2>Join CodeNest <i class="fas fa-rocket"></i></h2>
+    <p class="modal-sub">Create your free account</p>
+    <form onsubmit="handleSignup(event)">
+      <div class="form-group"><label>Username</label><input type="text" placeholder="coder_legend" required/></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+      <div class="form-group"><label>Password</label><input type="password" required/></div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+    <p class="modal-footer-text">Have one? <a onclick="switchModal('signupModal','loginModal')">Log In</a></p>
+  </div>
+</div>
+<footer class="footer" style="margin-top:4rem">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-brand" style="margin-bottom:1rem"><span class="brand-icon"><i class="fas fa-code"></i></span><span class="brand-name">CodeNest</span></div>
+      <p>The world's best coding platform.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><ul>
+      <li><a href="challenges.html">Challenges</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="practice.html">Practice</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Languages</h4><ul>
+      <li><a href="#">Python</a></li><li><a href="#">Java</a></li>
+      <li><a href="#">C++</a></li><li><a href="#">JavaScript</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="#">About</a></li><li><a href="#">Blog</a></li>
+      <li><a href="#">Careers</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 CodeNest. All rights reserved.</p></div>
+</footer>
+<script src="assets/js/main.js"></script>
+
+<script>
+function switchLbTab(id, btn) {
+  document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.lb-section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('lb-' + id).classList.add('active');
+}
+</script></body>
+</html>

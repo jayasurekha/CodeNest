@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Practice - CodeNest</title>
+<link rel="stylesheet" href="assets/css/style.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+.practice-layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 68px)}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem;position:sticky;top:68px;height:calc(100vh - 68px);overflow-y:auto}
+.stitle{font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin:1.25rem 0 .5rem;font-weight:700}
+.sitem{display:flex;align-items:center;gap:10px;padding:.55rem .75rem;border-radius:8px;cursor:pointer;color:var(--text-muted);font-size:.88rem;font-weight:500;transition:all .2s;margin-bottom:2px}
+.sitem:hover,.sitem.active{background:var(--brown-100);color:var(--amber);font-weight:700}
+.sdot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.sbadge{margin-left:auto;background:rgba(245,158,11,.12);color:var(--amber);padding:.1rem .45rem;border-radius:50px;font-size:.7rem;font-weight:700}
+.pmain{padding:2rem 2.5rem}
+.sec{display:none}.sec.active{display:block}
+.tcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1.25rem;margin-bottom:2.5rem}
+.tcard{border-radius:var(--radius-lg);padding:1.5rem;cursor:pointer;transition:all .2s;color:white}
+.tcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.tcard h4{margin-bottom:.25rem}.tcard p{font-size:.82rem;opacity:.8;margin-bottom:1rem}
+.pbar{background:rgba(255,255,255,.25);border-radius:50px;height:6px;margin-bottom:.35rem;overflow:hidden}
+.pfill{height:100%;border-radius:50px;background:rgba(255,255,255,.85)}.plabel{font-size:.72rem;opacity:.7}
+.tsec{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:2rem;margin-bottom:2rem}
+.tsec h3{margin-bottom:1.25rem;display:flex;align-items:center;gap:10px}
+.qopts{display:flex;flex-direction:column;gap:.65rem;margin-bottom:1.5rem}
+.qopt{display:flex;align-items:center;gap:.75rem;padding:.75rem 1.1rem;border-radius:var(--radius);border:1.5px solid var(--border);cursor:pointer;font-size:.92rem;transition:all .2s}
+.qopt:hover{border-color:var(--amber);background:rgba(245,158,11,.04)}
+.qopt.sel{border-color:var(--amber);background:rgba(245,158,11,.08)}
+.qopt.ok{border-color:#10b981;background:rgba(16,185,129,.08);color:#047857}
+.qopt.no{border-color:#f43f5e;background:rgba(244,63,94,.06);color:#be123c}
+.qnum{width:26px;height:26px;border-radius:50%;background:var(--brown-100);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0}
+.expl{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:1rem;font-size:.88rem;color:#047857;margin-top:1rem;display:none}
+@media(max-width:900px){.practice-layout{grid-template-columns:1fr}.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body><nav class="navbar">
+  <div class="nav-brand"><span class="brand-icon"><i class="fas fa-code"></i></span><span class="brand-name">CodeNest</span></div>
+  <ul class="nav-links">
+<li><a href="index.html">Home</a></li>
+<li><a href="challenges.html">Challenges</a></li>
+<li><a href="competitions.html">Competitions</a></li>
+<li><a href="practice.html"  class="active">Practice</a></li>
+<li><a href="leaderboard.html">Leaderboard</a></li>
+  </ul>
+  <div class="nav-actions">
+    <button class="btn btn-outline" onclick="openModal('loginModal')">Log In</button>
+    <button class="btn btn-primary" onclick="openModal('signupModal')">Sign Up</button>
+  </div>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<section class="page-hero">
+  <div class="page-hero-content">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Practice</div>
+    <h1>Practice &amp; <span class="gradient-text">Tests</span></h1>
+    <p>Topic-wise practice tracks, quick quizzes, and a full online IDE for every language.</p>
+  </div>
+</section>
+<div class="practice-layout">
+  <aside class="sidebar">
+    <p class="stitle">Sections</p>
+    <div class="sitem active" onclick="showSec('tracks',this)"><i class="fas fa-road" style="color:var(--amber)"></i>Practice Tracks</div>
+    <div class="sitem" onclick="showSec('quiz',this)"><i class="fas fa-question-circle" style="color:var(--purple)"></i>Quick Quiz<span class="sbadge">New</span></div>
+    <div class="sitem" onclick="showSec('ide',this)"><i class="fas fa-laptop-code" style="color:var(--teal)"></i>Online IDE</div>
+    <p class="stitle">Topics</p>
+    <div class="sitem"><span class="sdot" style="background:#f59e0b"></span>Arrays &amp; Strings</div>
+    <div class="sitem"><span class="sdot" style="background:#8b5cf6"></span>Dynamic Programming</div>
+    <div class="sitem"><span class="sdot" style="background:#10b981"></span>Graphs &amp; Trees</div>
+    <div class="sitem"><span class="sdot" style="background:#3b82f6"></span>Sorting &amp; Searching</div>
+    <div class="sitem"><span class="sdot" style="background:#f97316"></span>Math &amp; Number Theory</div>
+    <div class="sitem"><span class="sdot" style="background:#ec4899"></span>Bit Manipulation</div>
+    <p class="stitle">Languages</p>
+    <div class="sitem"><i class="fab fa-python" style="color:#f7c948"></i>Python<span class="sbadge">Top</span></div>
+    <div class="sitem"><i class="fab fa-java" style="color:#3b82f6"></i>Java</div>
+    <div class="sitem"><i class="fas fa-copyright" style="color:#a78bfa"></i>C / C++</div>
+    <div class="sitem"><i class="fab fa-js" style="color:#34d399"></i>JavaScript</div>
+    <div class="sitem"><i class="fas fa-cog" style="color:#f87171"></i>Rust</div>
+    <div class="sitem"><i class="fas fa-leaf" style="color:#60a5fa"></i>Go</div>
+  </aside>
+  <main class="pmain">
+    <!-- TRACKS -->
+    <div class="sec active" id="sec-tracks">
+      <h2 style="margin-bottom:.5rem">Practice <span class="gradient-text">Tracks</span></h2>
+      <p style="color:var(--text-muted);margin-bottom:2rem">Structured topic-wise paths to master every concept.</p>
+      <div class="tcards">
+        <div class="tcard" style="background:linear-gradient(135deg,#f59e0b,#f97316)">
+          <div style="font-size:2rem;margin-bottom:.75rem">📋</div>
+          <h4>Arrays &amp; Strings</h4>
+          <p>Foundation: two-pointer, sliding window, prefix sums.</p>
+          <div class="pbar"><div class="pfill" style="width:65%"></div></div>
+          <div class="plabel">65% &bull; 130/200 problems</div>
+        </div>
+        <div class="tcard" style="background:linear-gradient(135deg,#8b5cf6,#6366f1)">
+          <div style="font-size:2rem;margin-bottom:.75rem">🧠</div>
+          <h4>Dynamic Programming</h4>
+          <p>Memoization, tabulation, knapsack, LCS and more.</p>
+          <div class="pbar"><div class="pfill" style="width:30%"></div></div>
+          <div class="plabel">30% &bull; 45/150 problems</div>
+        </div>
+        <div class="tcard" style="background:linear-gradient(135deg,#10b981,#0ea5e9)">
+          <div style="font-size:2rem;margin-bottom:.75rem">🌲</div>
+          <h4>Graphs &amp; Trees</h4>
+          <p>BFS, DFS, Dijkstra, Kruskal, tree traversals.</p>
+          <div class="pbar"><div class="pfill" style="width:20%"></div></div>
+          <div class="plabel">20% &bull; 30/180 problems</div>
+        </div>
+        <div class="tcard" style="background:linear-gradient(135deg,#3b82f6,#60a5fa)">
+          <div style="font-size:2rem;margin-bottom:.75rem">🔍</div>
+          <h4>Sorting &amp; Searching</h4>
+          <p>Binary search, quicksort, mergesort, counting sort.</p>
+          <div class="pbar"><div class="pfill" style="width:50%"></div></div>
+          <div class="plabel">50% &bull; 50/100 problems</div>
+        </div>
+        <div class="tcard" style="background:linear-gradient(135deg,#f97316,#facc15)">
+          <div style="font-size:2rem;margin-bottom:.75rem">🔢</div>
+          <h4>Math &amp; Number Theory</h4>
+          <p>GCD, primes, modular arithmetic, combinatorics.</p>
+          <div class="pbar"><div class="pfill" style="width:10%"></div></div>
+          <div class="plabel">10% &bull; 12/120 problems</div>
+        </div>
+        <div class="tcard" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">
+          <div style="font-size:2rem;margin-bottom:.75rem">⚡</div>
+          <h4>Bit Manipulation</h4>
+          <p>XOR tricks, bit masking, power of two tricks.</p>
+          <div class="pbar"><div class="pfill" style="width:5%"></div></div>
+          <div class="plabel">5% &bull; 4/80 problems</div>
+        </div>
+      </div>
+      <div class="tsec">
+        <h3><i class="fas fa-fire" style="color:var(--orange)"></i> Daily Test — October 14, 2026</h3>
+        <p style="color:var(--text-muted);margin-bottom:1.5rem">Complete 5 timed problems to earn your daily streak badge.</p>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap">
+          <div style="flex:1;min-width:180px;background:var(--brown-50);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center"><div style="font-size:2rem;margin-bottom:.35rem">🔥</div><div style="font-size:1.4rem;font-weight:800">7</div><div style="font-size:.8rem;color:var(--text-muted)">Day Streak</div></div>
+          <div style="flex:1;min-width:180px;background:var(--brown-50);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center"><div style="font-size:2rem;margin-bottom:.35rem">⭐</div><div style="font-size:1.4rem;font-weight:800">3/5</div><div style="font-size:.8rem;color:var(--text-muted)">Today's Problems</div></div>
+          <div style="flex:1;min-width:180px;background:var(--brown-50);border:1px solid var(--border);border-radius:12px;padding:1.25rem;text-align:center"><div style="font-size:2rem;margin-bottom:.35rem">🏆</div><div style="font-size:1.4rem;font-weight:800">+150</div><div style="font-size:.8rem;color:var(--text-muted)">XP Available</div></div>
+        </div>
+        <button class="btn btn-primary" style="margin-top:1.5rem" onclick="showSec('quiz',null)">Start Daily Test <i class="fas fa-play"></i></button>
+      </div>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="sec" id="sec-quiz">
+      <h2 style="margin-bottom:.5rem">Quick <span class="gradient-text">Quiz</span></h2>
+      <p style="color:var(--text-muted);margin-bottom:2rem">Multiple-choice questions with instant feedback.</p>
+      <div class="tsec">
+        <h3><span style="background:rgba(245,158,11,.12);color:var(--amber);padding:.2rem .7rem;border-radius:50px;font-size:.8rem;margin-right:.75rem">Q1/5</span>Arrays &amp; Hashing</h3>
+        <p style="font-size:1rem;margin-bottom:1.5rem;font-weight:500">What is the average-case time complexity of searching in a Hash Map?</p>
+        <div class="qopts" id="q1">
+          <div class="qopt" onclick="pick(this,'q1',false)"><span class="qnum">A</span> O(n)</div>
+          <div class="qopt" onclick="pick(this,'q1',true)"><span class="qnum">B</span> O(1)</div>
+          <div class="qopt" onclick="pick(this,'q1',false)"><span class="qnum">C</span> O(log n)</div>
+          <div class="qopt" onclick="pick(this,'q1',false)"><span class="qnum">D</span> O(n&sup2;)</div>
+        </div>
+        <div class="expl" id="q1-ex">&#10003; Correct! Hash maps use a hash function to compute the index in O(1) average time.</div>
+      </div>
+      <div class="tsec">
+        <h3><span style="background:rgba(139,92,246,.12);color:var(--purple);padding:.2rem .7rem;border-radius:50px;font-size:.8rem;margin-right:.75rem">Q2/5</span>Dynamic Programming</h3>
+        <p style="font-size:1rem;margin-bottom:1.5rem;font-weight:500">Which technique does Dynamic Programming primarily use to optimize recursion?</p>
+        <div class="qopts" id="q2">
+          <div class="qopt" onclick="pick(this,'q2',false)"><span class="qnum">A</span> Divide and Conquer</div>
+          <div class="qopt" onclick="pick(this,'q2',false)"><span class="qnum">B</span> Backtracking</div>
+          <div class="qopt" onclick="pick(this,'q2',true)"><span class="qnum">C</span> Memoization (caching subproblems)</div>
+          <div class="qopt" onclick="pick(this,'q2',false)"><span class="qnum">D</span> Greedy Selection</div>
+        </div>
+        <div class="expl" id="q2-ex">&#10003; Correct! DP stores already-computed subproblem results to avoid redundant computation.</div>
+      </div>
+      <div class="tsec">
+        <h3><span style="background:rgba(16,185,129,.12);color:var(--green);padding:.2rem .7rem;border-radius:50px;font-size:.8rem;margin-right:.75rem">Q3/5</span>Graphs</h3>
+        <p style="font-size:1rem;margin-bottom:1.5rem;font-weight:500">Which algorithm finds the shortest path in an unweighted graph?</p>
+        <div class="qopts" id="q3">
+          <div class="qopt" onclick="pick(this,'q3',true)"><span class="qnum">A</span> BFS (Breadth-First Search)</div>
+          <div class="qopt" onclick="pick(this,'q3',false)"><span class="qnum">B</span> DFS (Depth-First Search)</div>
+          <div class="qopt" onclick="pick(this,'q3',false)"><span class="qnum">C</span> Kruskal's Algorithm</div>
+          <div class="qopt" onclick="pick(this,'q3',false)"><span class="qnum">D</span> Floyd-Warshall</div>
+        </div>
+        <div class="expl" id="q3-ex">&#10003; Correct! BFS explores nodes level-by-level, guaranteeing shortest path in unweighted graphs.</div>
+      </div>
+      <button class="btn btn-primary" onclick="finishQuiz()">Submit Quiz <i class="fas fa-check"></i></button>
+      <button class="btn btn-outline" style="margin-left:1rem" onclick="showSec('tracks',null)">Back to Tracks</button>
+    </div>
+
+    <!-- IDE -->
+    <div class="sec" id="sec-ide">
+      <h2 style="margin-bottom:.5rem">Online <span class="gradient-text">IDE</span></h2>
+      <p style="color:var(--text-muted);margin-bottom:2rem">Write, run, and debug code in 50+ languages. No setup needed.</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem;align-items:center">
+        <select id="lang-select" style="background:var(--brown-100);color:var(--text);border:1.5px solid var(--border);padding:.5rem 1rem;border-radius:8px;font-size:.9rem">
+          <option value="python">Python 3.11</option>
+          <option value="javascript">JavaScript (Node 20)</option>
+          <option value="java">Java 21</option>
+          <option value="cpp">C++17</option>
+          <option value="go">Go 1.22</option>
+          <option value="rust">Rust 1.75</option>
+          <option value="kotlin">Kotlin 1.9</option>
+          <option value="swift">Swift 5.9</option>
+          <option value="typescript">TypeScript 5</option>
+          <option value="ruby">Ruby 3.3</option>
+          <option value="php">PHP 8.3</option>
+          <option value="csharp">C# 12</option>
+          <option value="scala">Scala 3</option>
+          <option value="r">R 4.3</option>
+          <option value="haskell">Haskell</option>
+          <option value="dart">Dart 3</option>
+        </select>
+        <button class="btn btn-primary btn-sm" onclick="runCode()"><i class="fas fa-play"></i> Run</button>
+        <button class="btn btn-outline btn-sm" onclick="clearCode()"><i class="fas fa-eraser"></i> Clear</button>
+        <button class="btn btn-outline btn-sm" onclick="loadSample()"><i class="fas fa-file-code"></i> Sample</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div class="ide-panel">
+          <div class="panel-header"><span><i class="fas fa-code"></i> Editor</span></div>
+          <textarea id="code-editor" spellcheck="false" style="height:380px">def greet(name):
+    print(f"Hello, {name}!")
+
+greet("CodeNest")</textarea>
+        </div>
+        <div class="output-panel">
+          <div class="panel-header"><span><i class="fas fa-terminal"></i> Output</span></div>
+          <div class="output-content" id="code-output"><span style="color:#6b7280">Output appears here...</span></div>
+        </div>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.5rem;margin-top:1.5rem">
+        <h4 style="margin-bottom:1rem"><i class="fas fa-keyboard" style="color:var(--amber)"></i> Custom Input (stdin)</h4>
+        <textarea id="custom-input" style="width:100%;background:var(--brown-50);border:1.5px solid var(--border);border-radius:10px;padding:.75rem;font-family:monospace;font-size:.88rem;resize:vertical;height:80px;color:var(--text)" placeholder="Provide standard input here..."></textarea>
+      </div>
+    </div>
+  </main>
+</div>
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+    <h2>Welcome Back <i class="fas fa-code"></i></h2>
+    <p class="modal-sub">Log in to continue coding</p>
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+      <div class="form-group"><label>Password</label><input type="password" placeholder="Password" required/></div>
+      <button type="submit" class="btn btn-primary btn-block">Log In</button>
+    </form>
+    <p class="modal-footer-text">New here? <a onclick="switchModal('loginModal','signupModal')">Sign Up</a></p>
+  </div>
+</div>
+<div class="modal-overlay" id="signupModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('signupModal')"><i class="fas fa-times"></i></button>
+    <h2>Join CodeNest <i class="fas fa-rocket"></i></h2>
+    <p class="modal-sub">Create your free account</p>
+    <form onsubmit="handleSignup(event)">
+      <div class="form-group"><label>Username</label><input type="text" placeholder="coder_legend" required/></div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+      <div class="form-group"><label>Password</label><input type="password" required/></div>
+      <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    </form>
+    <p class="modal-footer-text">Have one? <a onclick="switchModal('signupModal','loginModal')">Log In</a></p>
+  </div>
+</div>
+<footer class="footer" style="margin-top:4rem">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="nav-brand" style="margin-bottom:1rem"><span class="brand-icon"><i class="fas fa-code"></i></span><span class="brand-name">CodeNest</span></div>
+      <p>The world's best coding platform.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-github"></i></a>
+        <a href="#"><i class="fab fa-discord"></i></a>
+      </div>
+    </div>
+    <div class="footer-col"><h4>Platform</h4><ul>
+      <li><a href="challenges.html">Challenges</a></li>
+      <li><a href="competitions.html">Competitions</a></li>
+      <li><a href="practice.html">Practice</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Languages</h4><ul>
+      <li><a href="#">Python</a></li><li><a href="#">Java</a></li>
+      <li><a href="#">C++</a></li><li><a href="#">JavaScript</a></li>
+    </ul></div>
+    <div class="footer-col"><h4>Company</h4><ul>
+      <li><a href="#">About</a></li><li><a href="#">Blog</a></li>
+      <li><a href="#">Careers</a></li>
+    </ul></div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 CodeNest. All rights reserved.</p></div>
+</footer>
+<script src="assets/js/main.js"></script>
+
+<script>
+function showSec(id, btn) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.sitem').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function pick(el, qid, correct) {
+  const opts = document.querySelectorAll('#' + qid + ' .qopt');
+  opts.forEach(o => { o.classList.remove('sel','ok','no'); o.onclick = null; });
+  el.classList.add(correct ? 'ok' : 'no');
+  const expl = document.getElementById(qid + '-ex');
+  if (expl) { expl.style.display = 'block'; }
+  if (!correct) showToast('Incorrect. The correct answer is highlighted.', 'error');
+  else showToast('Correct! Well done.', 'success');
+}
+function finishQuiz() { showToast('Quiz submitted! Score: 3/3 - 150 XP earned!', 'success'); }
+function loadSample() {
+  const lang = document.getElementById('lang-select').value;
+  const samples = {
+    python: 'def fibonacci(n):\n    a, b = 0, 1\n    for _ in range(n):\n        print(a)\n        a, b = b, a+b\n\nfibonacci(10)',
+    javascript: 'function fibonacci(n) {\n  let a = 0, b = 1;\n  for (let i = 0; i < n; i++) {\n    console.log(a);\n    [a, b] = [b, a + b];\n  }\n}\nfibonacci(10);',
+    java: 'public class Main {\n  public static void main(String[] args) {\n    int a = 0, b = 1;\n    for (int i = 0; i < 10; i++) {\n      System.out.println(a);\n      int c = a + b; a = b; b = c;\n    }\n  }\n}',
+    cpp: '#include<iostream>\nusing namespace std;\nint main(){\n  int a=0,b=1;\n  for(int i=0;i<10;i++){\n    cout<<a<<endl;\n    int c=a+b; a=b; b=c;\n  }\n}',
+  };
+  const ed = document.getElementById('code-editor');
+  if (ed) ed.value = (samples[lang] || '// Hello World in ' + lang).replace(/\\n/g, '\n');
+}
+</script></body>
+</html>

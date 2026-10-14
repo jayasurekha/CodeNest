@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Competitions – CodeNest</title>
+  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .comp-tabs {
+      display: flex;
+      gap: 0.5rem;
+      padding: 1.5rem 5% 0;
+      border-bottom: 2px solid var(--border);
+      background: var(--surface);
+    }
+    .comp-tab {
+      padding: 0.65rem 1.5rem;
+      border: none;
+      background: transparent;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .comp-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+    .comp-tab:hover { color: var(--brown-700); }
+
+    .comp-section { display: none; padding: 3rem 5%; }
+    .comp-section.active { display: block; }
+
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.75rem;
+    }
+    .comp-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .comp-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+
+    .comp-card-header {
+      padding: 1.5rem 1.75rem 1rem;
+      position: relative;
+    }
+    .comp-card-body { padding: 0 1.75rem 1.75rem; }
+
+    .comp-accent-bar {
+      height: 4px;
+      width: 100%;
+    }
+    .comp-info-row {
+      display: flex;
+      gap: 1.5rem;
+      margin: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .comp-info-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+    }
+    .comp-info-item i { color: var(--amber); }
+
+    .comp-prize {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(245,158,11,0.08);
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--brown-700);
+      margin-bottom: 1.25rem;
+    }
+    .comp-prize i { color: var(--amber); }
+
+    .comp-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+
+    .time-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .chip-live { background: rgba(244,63,94,0.1); color: var(--rose); border: 1px solid rgba(244,63,94,0.3); }
+    .chip-upcoming { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
+    .chip-past { background: rgba(100,116,139,0.1); color: #64748b; border: 1px solid rgba(100,116,139,0.3); }
+
+    .prizes-podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      padding: 2rem 5%;
+      background: linear-gradient(135deg, var(--brown-100), var(--brown-50));
+      border-radius: var(--radius-lg);
+      margin-bottom: 3rem;
+    }
+    .podium-place {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .podium-bar {
+      width: 80px;
+      border-radius: 8px 8px 0 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+    .podium-bar.first { height: 120px; background: linear-gradient(135deg,#f59e0b,#f97316); }
+    .podium-bar.second { height: 90px; background: linear-gradient(135deg,#94a3b8,#64748b); }
+    .podium-bar.third { height: 70px; background: linear-gradient(135deg,#cd7f32,#a0522d); }
+    .podium-label { margin-top: 0.5rem; font-weight: 700; font-size: 0.9rem; }
+    .podium-prize { color: var(--amber); font-weight: 800; font-size: 1.1rem; }
+
+    .reg-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .reg-form h3 { margin-bottom: 0.5rem; }
+    .reg-form p { color: var(--text-muted); margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon"><i class="fas fa-code"></i></span>
+      <span class="brand-name">CodeNest</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="challenges.html">Challenges</a></li>
+      <li><a href="competitions.html" class="active">Competitions</a></li>
+      <li><a href="practice.html">Practice</a></li>
+      <li><a href="leaderboard.html">Leaderboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn btn-outline" onclick="openModal('loginModal')">Log In</button>
+      <button class="btn btn-primary" onclick="openModal('signupModal')">Sign Up</button>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> / Competitions</div>
+      <h1>Live <span class="gradient-text">Competitions</span></h1>
+      <p>Compete in real-time rated contests, win prizes, and rise through the ranks of the global leaderboard.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <div style="background:rgba(255,255,255,0.12);color:white;padding:.5rem 1.2rem;border-radius:50px;font-size:.9rem"><span class="pulse" style="display:inline-block;margin-right:6px"></span> 3 Live Now</div>
+        <div style="background:rgba(255,255,255,0.12);color:white;padding:.5rem 1.2rem;border-radius:50px;font-size:.9rem"><i class="fas fa-calendar"></i> 8 Upcoming</div>
+        <div style="background:rgba(255,255,255,0.12);color:white;padding:.5rem 1.2rem;border-radius:50px;font-size:.9rem"><i class="fas fa-trophy"></i> $50K+ in Prizes</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIZES PODIUM -->
+  <div style="padding:3rem 5% 0">
+    <h2 style="text-align:center;margin-bottom:2rem">Top <span class="gradient-text">Prize Pool</span> This Season</h2>
+    <div class="prizes-podium">
+      <div class="podium-place">
+        <div class="podium-bar second">🥈</div>
+        <div class="podium-label">2nd Place</div>
+        <div class="podium-prize">$3,000</div>
+      </div>
+      <div class="podium-place">
+        <div class="podium-bar first">🏆</div>
+        <div class="podium-label">1st Place</div>
+        <div class="podium-prize">$10,000</div>
+      </div>
+      <div class="podium-place">
+        <div class="podium-bar third">🥉</div>
+        <div class="podium-label">3rd Place</div>
+        <div class="podium-prize">$1,500</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="comp-tabs">
+    <button class="comp-tab active" onclick="switchTab('live', this)"><span class="pulse" style="display:inline-block;margin-right:5px;background:var(--rose);width:7px;height:7px;border-radius:50%"></span> Live (3)</button>
+    <button class="comp-tab" onclick="switchTab('upcoming', this)">Upcoming (8)</button>
+    <button class="comp-tab" onclick="switchTab('past', this)">Past</button>
+    <button class="comp-tab" onclick="switchTab('register', this)">Register</button>
+  </div>
+
+  <!-- LIVE -->
+  <div class="comp-section active" id="live">
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#f43f5e,#f97316)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-live"><span class="pulse"></span> LIVE</span>
+            <span style="font-size:.8rem;color:var(--text-muted)">Rating: 1600–2200</span>
+          </div>
+          <h3>CodeNest Grand Challenge #42</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $10,000</div>
+          <div class="comp-tags">
+            <span class="tag">Algorithms</span><span class="tag">Data Structures</span><span class="tag">Math</span>
+          </div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-clock"></i> 01:42:30 remaining</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 2,841 participants</div>
+            <div class="comp-info-item"><i class="fas fa-puzzle-piece"></i> 6 problems</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="joinContest()">Enter Contest <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#6366f1)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-live"><span class="pulse"></span> LIVE</span>
+            <span style="font-size:.8rem;color:var(--text-muted)">Beginner Friendly</span>
+          </div>
+          <h3>Rookie Rampage #9</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $2,000</div>
+          <div class="comp-tags"><span class="tag">Arrays</span><span class="tag">Strings</span></div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-clock"></i> 00:55:12 remaining</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 1,204 participants</div>
+            <div class="comp-info-item"><i class="fas fa-puzzle-piece"></i> 4 problems</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="joinContest()">Enter Contest <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#10b981,#3b82f6)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-live"><span class="pulse"></span> LIVE</span>
+            <span style="font-size:.8rem;color:var(--text-muted)">Team (2–4 players)</span>
+          </div>
+          <h3>Team Clash Summer 2026</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $5,000</div>
+          <div class="comp-tags"><span class="tag">Team</span><span class="tag">Graph</span><span class="tag">DP</span></div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-clock"></i> 02:15:00 remaining</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 430 teams</div>
+            <div class="comp-info-item"><i class="fas fa-puzzle-piece"></i> 5 problems</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="joinContest()">Enter Contest <i class="fas fa-arrow-right"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UPCOMING -->
+  <div class="comp-section" id="upcoming">
+    <div class="comp-grid">
+
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#f59e0b,#f97316)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-upcoming"><i class="fas fa-clock"></i> Starts in <span class="countdown" data-hours="5">05:00:00</span></span>
+          </div>
+          <h3>Algorithm Sprint 2026</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $8,000</div>
+          <div class="comp-tags"><span class="tag">Algorithms</span><span class="tag">Math</span></div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-calendar"></i> Oct 14, 2026</div>
+            <div class="comp-info-item"><i class="fas fa-hourglass"></i> 3 hours</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 1,205 registered</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="registerContest()">Register Free</button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#8b5cf6,#ec4899)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-upcoming"><i class="fas fa-clock"></i> Starts in <span class="countdown" data-hours="24">24:00:00</span></span>
+          </div>
+          <h3>Dynamic Programming Masters</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $4,000</div>
+          <div class="comp-tags"><span class="tag">DP</span><span class="tag">Advanced</span></div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-calendar"></i> Oct 15, 2026</div>
+            <div class="comp-info-item"><i class="fas fa-hourglass"></i> 4 hours</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 892 registered</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="registerContest()">Register Free</button>
+        </div>
+      </div>
+
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:linear-gradient(90deg,#10b981,#0ea5e9)"></div>
+        <div class="comp-card-header">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+            <span class="time-chip chip-upcoming"><i class="fas fa-clock"></i> Starts in <span class="countdown" data-hours="48">48:00:00</span></span>
+          </div>
+          <h3>Rookie Rumble #18</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-prize"><i class="fas fa-trophy"></i> Prize Pool: $1,500</div>
+          <div class="comp-tags"><span class="tag">Beginner</span><span class="tag">Arrays</span></div>
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-calendar"></i> Oct 16, 2026</div>
+            <div class="comp-info-item"><i class="fas fa-hourglass"></i> 2 hours</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 654 registered</div>
+          </div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="registerContest()">Register Free</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PAST -->
+  <div class="comp-section" id="past">
+    <div class="comp-grid">
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:#94a3b8"></div>
+        <div class="comp-card-header">
+          <span class="time-chip chip-past">Ended</span>
+          <h3 style="margin-top:.75rem">CodeNest Grand Challenge #41</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-calendar"></i> Sep 28, 2026</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 3,100 participants</div>
+          </div>
+          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.25rem">Winner: <strong>Aryan Kumar</strong> — Score: 2850 pts</p>
+          <button class="btn btn-outline" style="width:100%;justify-content:center">View Editorial</button>
+        </div>
+      </div>
+      <div class="comp-card">
+        <div class="comp-accent-bar" style="background:#94a3b8"></div>
+        <div class="comp-card-header">
+          <span class="time-chip chip-past">Ended</span>
+          <h3 style="margin-top:.75rem">String Theory Contest</h3>
+        </div>
+        <div class="comp-card-body">
+          <div class="comp-info-row">
+            <div class="comp-info-item"><i class="fas fa-calendar"></i> Sep 14, 2026</div>
+            <div class="comp-info-item"><i class="fas fa-users"></i> 2,040 participants</div>
+          </div>
+          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.25rem">Winner: <strong>Sophia Martinez</strong> — Score: 2760 pts</p>
+          <button class="btn btn-outline" style="width:100%;justify-content:center">View Editorial</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REGISTER -->
+  <div class="comp-section" id="register">
+    <div class="reg-form">
+      <h3>Register for a Contest</h3>
+      <p>Fill in the form below to register for an upcoming competition. It's free!</p>
+      <form onsubmit="submitRegistration(event)">
+        <div class="form-group"><label>Full Name</label><input type="text" placeholder="Your name" required/></div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+        <div class="form-group"><label>Select Contest</label>
+          <select style="width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:12px;background:var(--brown-50);font-size:.95rem;color:var(--text)" required>
+            <option value="">-- Choose a contest --</option>
+            <option>Algorithm Sprint 2026 (Oct 14)</option>
+            <option>Dynamic Programming Masters (Oct 15)</option>
+            <option>Rookie Rumble #18 (Oct 16)</option>
+            <option>CodeNest Grand Challenge #43 (Oct 21)</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Experience Level</label>
+          <select style="width:100%;padding:.7rem 1rem;border:1.5px solid var(--border);border-radius:12px;background:var(--brown-50);font-size:.95rem;color:var(--text)">
+            <option>Beginner (&lt; 6 months)</option>
+            <option>Intermediate (6mo – 2yr)</option>
+            <option>Advanced (2yr+)</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register Now <i class="fas fa-rocket"></i></button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('loginModal')"><i class="fas fa-times"></i></button>
+      <h2>Welcome Back</h2><p class="modal-sub">Log in to continue</p>
+      <form onsubmit="handleLogin(event)">
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+        <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••" required/></div>
+        <button type="submit" class="btn btn-primary btn-block">Log In</button>
+      </form>
+      <p class="modal-footer-text">New here? <a onclick="switchModal('loginModal','signupModal')">Sign Up</a></p>
+    </div>
+  </div>
+  <div class="modal-overlay" id="signupModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal('signupModal')"><i class="fas fa-times"></i></button>
+      <h2>Join CodeNest</h2><p class="modal-sub">Create your free account</p>
+      <form onsubmit="handleSignup(event)">
+        <div class="form-group"><label>Username</label><input type="text" placeholder="coder_legend" required/></div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="you@example.com" required/></div>
+        <div class="form-group"><label>Password</label><input type="password" placeholder="••••••••" required/></div>
+        <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+      </form>
+      <p class="modal-footer-text">Have an account? <a onclick="switchModal('signupModal','loginModal')">Log In</a></p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer" style="margin-top:4rem">
+    <div class="footer-grid">
+      <div class="footer-brand"><div class="nav-brand" style="margin-bottom:1rem"><span class="brand-icon"><i class="fas fa-code"></i></span><span class="brand-name">CodeNest</span></div><p>The world's best coding platform.</p><div class="social-links"><a href="#"><i class="fab fa-twitter"></i></a><a href="#"><i class="fab fa-github"></i></a><a href="#"><i class="fab fa-discord"></i></a></div></div>
+      <div class="footer-col"><h4>Platform</h4><ul><li><a href="challenges.html">Challenges</a></li><li><a href="competitions.html">Competitions</a></li><li><a href="practice.html">Practice</a></li><li><a href="leaderboard.html">Leaderboard</a></li></ul></div>
+      <div class="footer-col"><h4>Languages</h4><ul><li><a href="#">Python</a></li><li><a href="#">Java</a></li><li><a href="#">C++</a></li><li><a href="#">JavaScript</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Careers</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>&copy; 2026 CodeNest. All rights reserved.</p></div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+  <script>
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.comp-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.comp-section').forEach(s => s.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(tabId).classList.add('active');
+    }
+    function joinContest() { showToast('Opening contest arena... Good luck! 🚀', 'success'); }
+    function registerContest() { showToast('Registered! Check your email for confirmation.', 'success'); }
+    function submitRegistration(e) {
+      e.preventDefault();
+      showToast('Successfully registered! See you at the contest 🎯', 'success');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
